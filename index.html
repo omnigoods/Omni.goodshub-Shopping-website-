@@ -1,13 +1,113 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
-  <title>My Site</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>मेरी शॉप</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header, footer { background-color: #333; color: #fff; text-align: center; padding: 1em; }
+    nav a { color: #fff; margin: 0 1em; text-decoration: none; }
+    .product { border: 1px solid #ccc; padding: 1em; margin: 1em; text-align: center; }
+    .product img { max-width: 100%; height: auto; }
+    .price { color: green; font-weight: bold; }
+    .old-price { text-decoration: line-through; color: red; }
+    .cart { position: fixed; top: 1em; right: 1em; background: #fff; border: 1px solid #ccc; padding: 1em; }
+    .checkout { display: none; position: fixed; top: 10%; left: 10%; width: 80%; background: #fff; border: 1px solid #ccc; padding: 1em; }
+    .checkout input, .checkout select { width: 100%; padding: 0.5em; margin: 0.5em 0; }
+    .close { float: right; cursor: pointer; }
+  </style>
 </head>
 <body>
-  <h1>Welcome to my e-commerce site</h1>
-  <button onclick="alert('Added to cart')">Add to cart</button>
-  <script src="script.js"></script>
+
+<header>
+  <h1>मेरी शॉप</h1>
+  <nav>
+    <a href="#">होम</a>
+    <a href="#">उत्पाद</a>
+    <a href="#">संपर्क करें</a>
+  </nav>
+</header>
+
+<main>
+  <div class="product">
+    <img src="https://rukminim2.flixcart.com/image/416/416/xif0q/torch/6/4/q/-original-imagqjz5yqzqz9zq.jpeg" alt="Mobizac USB Rechargeable COB Hammer Torch">
+    <h2>Mobizac USB Rechargeable COB Hammer Torch</h2>
+    <p><span class="old-price">₹799</span> <span class="price">₹385</span></p>
+    <p>मल्टी-फंक्शनल टॉर्च जिसमें USB चार्जिंग, पावरबैंक और इमरजेंसी हैमर शामिल हैं।</p>
+    <button onclick="addToCart('Mobizac USB Rechargeable COB Hammer Torch', 385)">कार्ट में जोड़ें</button>
+    <button onclick="buyNow('Mobizac USB Rechargeable COB Hammer Torch', 385)">अभी खरीदें</button>
+  </div>
+</main>
+
+<div class="cart" id="cart">
+  <h3>कार्ट</h3>
+  <ul id="cart-items"></ul>
+  <p>कुल: ₹<span id="total">0</span></p>
+  <button onclick="showCheckout()">चेकआउट</button>
+</div>
+
+<div class="checkout" id="checkout">
+  <span class="close" onclick="hideCheckout()">×</span>
+  <h2>चेकआउट</h2>
+  <form onsubmit="submitOrder(event)">
+    <label>नाम:</label>
+    <input type="text" id="name" required>
+    <label>पता:</label>
+    <input type="text" id="address" required>
+    <label>भुगतान विधि:</label>
+    <select id="payment">
+      <option value="cod">कैश ऑन डिलीवरी</option>
+    </select>
+    <button type="submit">ऑर्डर करें</button>
+  </form>
+</div>
+
+<footer>
+  <p>&copy; 2025 मेरी शॉप</p>
+</footer>
+
+<script>
+  let cart = [];
+  function addToCart(product, price) {
+    cart.push({ product, price });
+    updateCart();
+  }
+  function buyNow(product, price) {
+    cart = [{ product, price }];
+    updateCart();
+    showCheckout();
+  }
+  function updateCart() {
+    const cartItems = document.getElementById('cart-items');
+    cartItems.innerHTML = '';
+    let total = 0;
+    cart.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = item.product + ' - ₹' + item.price;
+      cartItems.appendChild(li);
+      total += item.price;
+    });
+    document.getElementById('total').textContent = total;
+  }
+  function showCheckout() {
+    document.getElementById('checkout').style.display = 'block';
+  }
+  function hideCheckout() {
+    document.getElementById('checkout').style.display = 'none';
+  }
+  function submitOrder(event) {
+    event.preventDefault();
+    const name = document.getElementById('name').value;
+    const address = document.getElementById('address').value;
+    const payment = document.getElementById('payment').value;
+    alert('धन्यवाद, ' + name + '! आपका ऑर्डर प्राप्त हो गया है।');
+    cart = [];
+    updateCart();
+    hideCheckout();
+  }
+</script>
+
 </body>
 </html>
